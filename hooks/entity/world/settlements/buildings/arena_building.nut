@@ -21,7 +21,7 @@
 	
 		if(this.World.Assets.m.IsArenaTooled && !this.isClosed() && (this.World.getTime().Days >= this.m.CooldownUntil) && this.m.DailyRefresh)
 		{
-			this.m.ArenaAttemptsRefresh = 6;
+			this.m.ArenaAttemptsRefresh = 10;
 			this.m.DailyRefresh = false;
 		}
 		onClicked(_townScreen);
@@ -65,7 +65,7 @@
 	local onDeserialize = o.onDeserialize;
 	o.onDeserialize = function (_in){
         onDeserialize(_in);
-        ::ArenaRetinue.Mod.Serialization.isSavedVersionAtLeast("1.0.0", _in.getMetaData()) {
+        if(::ArenaRetinue.Mod.Serialization.isSavedVersionAtLeast("1.0.0", _in.getMetaData())) {
           this.m.DailyRefresh = _in.readBool();
           this.m.ArenaAttemptsRefresh = _in.readI16();
         }
