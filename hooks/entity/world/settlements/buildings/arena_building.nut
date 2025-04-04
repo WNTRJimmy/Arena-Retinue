@@ -1,17 +1,16 @@
 ::mods_hookExactClass("entity/world/settlements/buildings/arena_building", function(o)
 {
-	o.m.ArenaAttemptsRefresh <- 1;
+	o.m.NumArenaAttempts <- 3;
 	o.m.DailyRefresh <- true;
 
 	local refreshCooldown = o.refreshCooldown;
 	o.refreshCooldown = function ()
 	{
-		if(!this.World.Assets.m.IsArenaTooled || this.m.ArenaAttemptsRefresh == 1){
+
+		this.updateAttempts();
+		if(this.m.NumArenaAttempts == 0){
 			refreshCooldown();
 			this.m.DailyRefresh = true;
-		}
-		else{
-			this.m.ArenaAttemptsRefresh--;
 		}
 	}
 	
@@ -19,14 +18,26 @@
 	o.onClicked = function (_townScreen)
 	{
 	
-		if(this.World.Assets.m.IsArenaTooled && !this.isClosed() && (this.World.getTime().Days >= this.m.CooldownUntil) && this.m.DailyRefresh)
+		if(this.World.Assets.m.IsArenaTooled && this.m.DailyRefresh)
 		{
-			this.m.ArenaAttemptsRefresh = 10;
+
+			this.m.NumArenaAttempts = 3;
 			this.m.DailyRefresh = false;
 		}
 		onClicked(_townScreen);
 	}
 	
+	o.updateAttempts <- function ()
+	{
+		if(this.World.Assets.m.IsArenaTooled)
+		{
+			this.m.NumArenaAttempts--;
+		}else
+		{
+			this.m.NumArenaAttempts = 0;
+		}
+	}
+
 	o.getAttempts <- function ()
 	{
 		if(!this.World.Assets.m.IsArenaTooled){
@@ -42,14 +53,14 @@
 		else
 		{
 			if(this.isClosed()){
-				return [0,5]
+				return [0,3]
 			}
 			else if(this.m.DailyRefresh){
-				return [5,5];
+				return [3,3];
 			}
 			else
 			{
-				return [this.m.ArenaAttemptsRefresh / 2, 5];
+				return [this.m.NumArenaAttempts, 3];
 			}
 
 		}
@@ -58,8 +69,8 @@
 	local onSerialize = o.onSerialize
 	o.onSerialize = function ( _out){
 		onSerialize(_out);
-		_out.writeBool(this.m.DailyRefresh);
-		_out.writeI16(this.m.ArenaAttemptsRefresh)
+			_out.writeBool(this.m.DailyRefresh);
+			_out.writeI16(this.m.NumArenaAttempts)
 	}
 
 	local onDeserialize = o.onDeserialize;
@@ -67,7 +78,7 @@
         onDeserialize(_in);
         if(::ArenaRetinue.Mod.Serialization.isSavedVersionAtLeast("1.0.0", _in.getMetaData())) {
           this.m.DailyRefresh = _in.readBool();
-          this.m.ArenaAttemptsRefresh = _in.readI16();
+          this.m.NumArenaAttempts = _in.readI16();
         }
 	}
 });
