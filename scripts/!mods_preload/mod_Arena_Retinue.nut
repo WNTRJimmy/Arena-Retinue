@@ -1,7 +1,7 @@
 ::ArenaRetinue <- {
 	ID = "mod_Arena_Retinue",
 	Name = "Arena Retinue",
-	Version = "4.0.0"
+	Version = "5.0.0"
 }
 ::ArenaRetinue.ModHook <- ::Hooks.register(::ArenaRetinue.ID, ::ArenaRetinue.Version, ::ArenaRetinue.Name);
 ::ArenaRetinue.ModHook.require("mod_legends >= 19.1.0", "mod_msu >= 1.6.0");

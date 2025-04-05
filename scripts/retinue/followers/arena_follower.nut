@@ -9,8 +9,8 @@ this.arena_follower <- this.inherit("scripts/retinue/follower", {
 		this.m.Image = "ui/campfire/legend_blacksmith_01";
 		this.m.Cost = 3250;
 		this.m.Effects = [
-			"Increase winnings from the arena by 25%",
-			"Fight up to 3 arena matches per day"
+			"Increase winnings from the arena by 15%",
+			"Fight up to 5 arena matches per day"
 		];
 		this.addRequirement("Triumph in 5 arena fights ", function() {
 			return ::World.Statistics.getFlags().getAsInt("ArenaFightsWon") >= 5;
